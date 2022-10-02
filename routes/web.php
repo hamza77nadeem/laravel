@@ -30,6 +30,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home2', [App\Http\Controllers\HomeController::class, 'index']);
+Route::post('/send', [App\Http\Controllers\HomeController::class, 'send']);
 Route::post('/add-product', [App\Http\Controllers\HomeController::class, 'store']);
 Route::get('add-product', [App\Http\Controllers\HomeController::class, 'create']);
 Route::get('admin', [App\Http\Controllers\HomeController::class, 'dashboard1']);

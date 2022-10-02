@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
+use Mail;
+use App\Mail\BetMail;
 class HomeController extends Controller
 {
     /**
@@ -75,6 +77,39 @@ class HomeController extends Controller
         
         $student = Product::find($id);
         return view('id', compact('student'));
+    }
+    public function send(Request $request){
+        $this->validate($request, [
+            
+            'email' => 'required|email',
+            'msg' => 'required',
+            'img' => 'required',
+            
+        ]);
+
+        $contact = new Contact;
+
+      
+        $contact->email = $request->email;
+        $contact->msg = $request->msg;
+        $contact->img = $request->img;
+       
+
+        $contact->save();
+        Mail::send('contact_email',
+             array(
+                 
+                 'email' => $request->get('email'),
+                 'msg' => $request->get('msg'),
+                 'img' => $request->get('img'),
+                
+             ), function($message) use ($request)
+               {
+                  $message->from($request->email);
+                  $message->to('ranahamzaghy@gmail.com');
+                  $message->subject('Contact from your website');
+               });
+        return back()
     }
     public function store(Request $request)
     {
@@ -159,7 +194,7 @@ class HomeController extends Controller
     }
     public function destroy4($id)
     {
-        $student = Product::destroy($id);
+        $student = User::destroy($id);
        return redirect('admin4');
     }
 }
